@@ -10,5 +10,5 @@ detection:
 tags:
     - attack.persistence
 # QRadar Closure:
-# True-Positive: Hücumçu tərəfindən Backdoor userinin yaradılması.
+# True-Positive: Hücumçu tərəfindən persistence yaratmaq üçün backdoor userinin yaradılması.
 # False-Positive: Administrator tərəfindən legit user yaradılması.
