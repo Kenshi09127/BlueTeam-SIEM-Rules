@@ -1,0 +1,17 @@
+title: Direct RDP Logon Bypass (PAM Bypass)
+description: PAM serverinin IP ünvanından fərqli mənbədən successful remote giriş (Logon Type 10).
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4624
+        LogonType: 10
+    filter:
+        IpAddress: '10.0.0.50' # PAM serverinin IP-si (özünüzünkü ilə dəyişin)
+    condition: selection and not filter
+tags:
+    - attack.lateral_movement
+# QRadar Closure:
+# True-Positive: Haker PAM müdafiəsini bypass edib birbaşa serverə qoşuldu.
+# False-Positive: Şəbəkədə yaranan problem administratoru birbaşa daxil olmağa məcbur etdi.
