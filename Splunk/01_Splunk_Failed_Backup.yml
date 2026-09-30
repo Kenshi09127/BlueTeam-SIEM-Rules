@@ -1,0 +1,14 @@
+title: Detect Failed Domain Controller Backup
+description: Active Directory backup failure detection.
+logsource:
+    product: windows
+    service: application
+detection:
+    selection:
+        EventID: [513, 12289, 8229]
+        SourceName: Microsoft-Windows-Backup
+    condition: selection
+# --- Splunk SPL Query ---
+# index=windows sourcetype=WinEventLog:Application (EventCode=513 OR EventCode=12289)
+#
+# Active Directory ehtiyat nüsxəsinin (backup) yaradılması zamanı xəta baş verdi.
