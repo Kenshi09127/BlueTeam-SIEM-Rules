@@ -1,0 +1,15 @@
+title: Şübhəli LSASS Yaddaş Erişimi
+description: Parolların oğurlanması (Mimikatz) üçün lsass.exe prosesinə giriş cəhdi (Sysmon ID 10).
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        EventID: 10
+        TargetImage|endswith: '\lsass.exe'
+    condition: selection
+tags:
+    - attack.credential_access
+# QRadar Closure:
+# True-Positive: RAM-dan parolların çıxarılması (dump) üçün alətin işlədilməsi.
+# False-Positive: Antivirus və ya ehtiyat nüsxə (backup) sisteminin legit müraciəti.
