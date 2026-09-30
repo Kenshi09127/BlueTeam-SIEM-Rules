@@ -1,0 +1,13 @@
+title: Lateral Movement from Honeypot to AD
+description: Traffic from Honeypot IP to Active Directory (Requirement 11).
+logsource:
+    category: firewall
+detection:
+    selection:
+        SourceIp: '192.168.1.100' # Honeypot IP
+        DestinationIp: '192.168.1.10' # AD IP
+    condition: selection
+# --- Splunk SPL Query ---
+# index=firewall src_ip="192.168.1.100" dest_ip="192.168.1.10"
+#
+# YÜKSƏK: Tələ (Honeypot) IP-sindən Active Directory serverinə trafik gəlir.
