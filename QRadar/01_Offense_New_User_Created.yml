@@ -1,1 +1,14 @@
-
+title: Detect New User Creation
+description: Windows Server-də yeni userin yaranmasının aşkarlanması
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4720
+    condition: selection
+tags:
+    - attack.persistence
+# QRadar Closure:
+# True-Positive: Hücumçu tərəfindən Backdoor userinin yaradılması
+# False-Positive: Administrator tərəfindən legit user yaradılması
