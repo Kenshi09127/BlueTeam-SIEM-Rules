@@ -1,0 +1,15 @@
+title: Execution from Temp Folder
+description: Executable faylın Temp qovluğundan işə salınması (Zərərli proqramların tez-tez etdiyi davranış).
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        EventID: 1
+        Image|contains: '\AppData\Local\Temp\'
+    condition: selection
+tags:
+    - attack.execution
+# QRadar Closure:
+# True-Positive: Virus dropper-in və ya paketdən çıxarılmış troyanın işə salınması.
+# False-Positive: Proqramın legit quraşdırılması (installerlər tez-tez Temp-dən işləyir).
