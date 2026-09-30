@@ -1,0 +1,15 @@
+title: Windows Defender Disabled
+description: Antivirus xidmətinin registry və ya komandalar vasitəsilə dayandırılması cəhdi.
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        EventID: 1
+        CommandLine|contains: 'DisableAntiSpyware'
+    condition: selection
+tags:
+    - attack.defense_evasion
+# QRadar Closure:
+# True-Positive: Zərərli proqram aşkarlanmaması üçün əvvəl antivirusu söndürür.
+# False-Positive: Defenderin proqram təminatını false detection etdiyinə görə quraşdırılması üçün admin tərəfindən müvəqqəti söndürülmə.
