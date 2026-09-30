@@ -1,0 +1,15 @@
+title: User Added to Local Administrators
+description: Administrators qrupuna əlavə edilməklə privilege escalation cəhdi.
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4732
+        TargetUserName: 'Administrators'
+    condition: selection
+tags:
+    - attack.privilege_escalation
+# QRadar Closure:
+# True-Positive: Compromise olunmuş user vasitəsilə privilege escalation.
+# False-Positive: Legit userin planlaşdırılmış şəkildə Administrators qrupuna əlavə edilməsi.
