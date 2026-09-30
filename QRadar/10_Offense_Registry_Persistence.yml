@@ -1,0 +1,15 @@
+title: Registry Persistence (Run/RunOnce)
+description: Kompüter işə düşəndə avtomatik başlamaq üçün reyestr açarlarının yaradılması.
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        EventID: 13
+        TargetObject|contains: '\Software\Microsoft\Windows\CurrentVersion\Run'
+    condition: selection
+tags:
+    - attack.persistence
+# QRadar Closure:
+# True-Positive: Restartdan sonra sistemdə qalmaq üçün troyan autorun-a əlavə olundu.
+# False-Positive: Legit tətbiq (məsələn, messenger) özünü autorun-a əlavə etdi.
