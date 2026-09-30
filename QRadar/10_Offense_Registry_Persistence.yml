@@ -1,5 +1,5 @@
 title: Registry Persistence (Run/RunOnce)
-description: Kompüter işə düşəndə avtomatik başlamaq üçün reyestr açarlarının yaradılması.
+description: Kompüter işə düşəndə avtomatik başlamaq üçün registry açarlarının yaradılması.
 logsource:
     product: windows
     service: sysmon
