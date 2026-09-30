@@ -1,0 +1,14 @@
+title: Brute Force Hücumunun Aşkarlanması
+description: Çoxsaylı yanlış parol daxiletmə cəhdləri (5 dəfədən çox) (Event ID 4625).
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4625
+    condition: selection | count(EventID) > 5
+tags:
+    - attack.credential_access
+# QRadar Closure:
+# True-Positive: Brute-force proqramı tərəfindən məqsədyönlü bruteforce hücumu.
+# False-Positive: İstifadəçi parolunu unudub və ardıcıl olaraq bir neçə dəfə daxil olmağa cəhd edib.
