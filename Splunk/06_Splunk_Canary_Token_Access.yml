@@ -1,0 +1,12 @@
+title: Honeypot Canary Token Accessed (CRITICAL)
+description: Access to fake sqladmin user or userpasswords.txt.
+logsource:
+    category: honeypot
+detection:
+    selection:
+        Target: ['sqladmin', 'userpasswords.txt']
+    condition: selection
+# --- Splunk SPL Query ---
+# index=honeypot (target="sqladmin" OR target="userpasswords.txt")
+#
+# KRİTİK: Kimsə saxta (canary) istifadəçiyə və ya fayla daxil olmağa çalışdı.
