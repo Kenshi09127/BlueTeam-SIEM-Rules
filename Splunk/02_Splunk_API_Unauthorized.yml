@@ -1,0 +1,13 @@
+title: Web Server API 401 Unauthorized
+description: Detects unauthorized API access attempts.
+logsource:
+    category: webserver
+detection:
+    selection:
+        sc_status: 401
+        c_uri: '/api/*'
+    condition: selection
+# --- Splunk SPL Query ---
+# index=web sourcetype=nginx:access status=401 uri_path="/api/*"
+#
+# Veb-serverin API-yə icazəsiz (Unauthorized) giriş cəhdi.
