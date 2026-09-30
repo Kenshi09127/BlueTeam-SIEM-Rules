@@ -11,4 +11,4 @@ tags:
     - attack.defense_evasion
 # QRadar Closure:
 # True-Positive: Hücumçu, attack izlərini itirmək üçün logları təmizlədi.
-# False-Positive: Administrator diskdə yer boşaltmaq üçün logları təmizlədi.
+# False-Positive: Administrator diskdə yer boşaltmaq üçün logları təmizləyib.
