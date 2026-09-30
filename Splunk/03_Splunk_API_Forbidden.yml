@@ -1,0 +1,12 @@
+title: Web Server API 403 Forbidden
+description: Detects forbidden directory access attempts.
+logsource:
+    category: webserver
+detection:
+    selection:
+        sc_status: 403
+    condition: selection
+# --- Splunk SPL Query ---
+# index=web sourcetype=nginx:access status=403
+#
+# Qadağan olunmuş qovluğa və ya fayla (Forbidden) giriş cəhdi.
