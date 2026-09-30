@@ -1,0 +1,12 @@
+title: WAF Blocked Vulnerability Scanner
+description: Detects sqlmap, nmap, nikto in User-Agent.
+logsource:
+    category: waf
+detection:
+    selection:
+        UserAgent|contains: ['sqlmap', 'nmap', 'nikto']
+    condition: selection
+# --- Splunk SPL Query ---
+# index=waf (user_agent="*sqlmap*" OR user_agent="*nmap*" OR user_agent="*nikto*")
+#
+# WAF tərəfindən zəiflik skanerlərinin (sqlmap, nmap) bloklanması.
