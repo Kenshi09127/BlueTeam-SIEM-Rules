@@ -1,0 +1,14 @@
+title: Security Log Cleared
+description: Windows security loglarının silinməsi. 
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 1102
+    condition: selection
+tags:
+    - attack.defense_evasion
+# QRadar Closure:
+# True-Positive: Hücumçu, attack izlərini itirmək üçün logları təmizlədi.
+# False-Positive: Administrator diskdə yer boşaltmaq üçün logları təmizlədi.
