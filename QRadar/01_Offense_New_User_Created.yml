@@ -1,5 +1,5 @@
 title: Detect New User Creation
-description: Windows Server-də yeni userin yaranmasının aşkarlanması
+description: Windows Server-də yeni userin yaranmasının aşkarlanması.
 logsource:
     product: windows
     service: security
@@ -10,5 +10,5 @@ detection:
 tags:
     - attack.persistence
 # QRadar Closure:
-# True-Positive: Hücumçu tərəfindən Backdoor userinin yaradılması
-# False-Positive: Administrator tərəfindən legit user yaradılması
+# True-Positive: Hücumçu tərəfindən Backdoor userinin yaradılması.
+# False-Positive: Administrator tərəfindən legit user yaradılması.
