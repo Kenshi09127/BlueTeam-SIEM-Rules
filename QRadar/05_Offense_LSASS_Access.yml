@@ -1,4 +1,4 @@
-title: Şübhəli LSASS Yaddaş Erişimi
+title: Suspicious LSASS Memory Access
 description: Parolların oğurlanması (Mimikatz) üçün lsass.exe prosesinə giriş cəhdi (Sysmon ID 10).
 logsource:
     product: windows
