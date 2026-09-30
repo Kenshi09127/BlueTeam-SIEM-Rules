@@ -1,0 +1,16 @@
+title: Suspicious PowerShell Execution (Encoded)
+description: Komandaları gizlətmək üçün -EncodedCommand arqumentindən istifadə (Base64).
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        EventID: 1
+        Image|endswith: '\powershell.exe'
+        CommandLine|contains: '-EncodedCommand'
+    condition: selection
+tags:
+    - attack.execution
+# QRadar Closure:
+# True-Positive: Haker antivirusu bypass etmək üçün gizli skripti işə salmağa çalışır.
+# False-Positive: Administrator tərəfindən legiti avtomatlaşdırma skriptinin işlədilməsi.
