@@ -1,0 +1,13 @@
+title: Malicious_DNS_Request_Blocked
+description: Request to C2 server blocked by DNS sinkhole.
+logsource:
+    category: dns
+detection:
+    selection:
+        QueryName|contains: 'malicious-c2.com'
+        Action: 'Blocked'
+    condition: selection
+# --- Splunk SPL Query ---
+# index=dns action="blocked" query="*malicious*"
+#
+# YÜKSƏK: Zərərli (C2) domenə DNS sorğusu bloklandı.
