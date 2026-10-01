@@ -1,0 +1,14 @@
+title: Privileged_Access
+description: Unauthorized privileged access detected by PAM.
+logsource:
+    category: pam
+detection:
+    selection:
+        Action: 'Login'
+        Role: 'Admin'
+        Status: 'Unauthorized'
+    condition: selection
+# --- Splunk SPL Query ---
+# index=pam action="login" role="admin" status="unauthorized"
+#
+# PAM sistemi tərəfindən icazəsiz admin girişinin aşkarlanması.
