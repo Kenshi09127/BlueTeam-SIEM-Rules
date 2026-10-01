@@ -1,0 +1,12 @@
+title: Malicious Email Attachment Detected
+description: Email containing .exe or .vbs attachment.
+logsource:
+    category: email
+detection:
+    selection:
+        AttachmentName|endswith: ['.exe', '.vbs']
+    condition: selection
+# --- Splunk SPL Query ---
+# index=email (attachment="*.exe" OR attachment="*.vbs")
+#
+# E-poçt vasitəsilə təhlükəli fayl (.exe, .vbs) göndərildi.
