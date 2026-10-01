@@ -1,0 +1,14 @@
+title: Data_Exfiltration_Attempt
+description: Attempt to copy credit card data to USB.
+logsource:
+    category: dlp
+detection:
+    selection:
+        Action: 'Copy'
+        Destination: 'USB'
+        DataInfo|contains: 'Credit_Card'
+    condition: selection
+# --- Splunk SPL Query ---
+# index=dlp action="copy" dest="usb" data_type="*credit_card*"
+#
+# YÜKSƏK: Həssas məlumatların (kredit kartı) USB-yə kopyalanması cəhdi.
