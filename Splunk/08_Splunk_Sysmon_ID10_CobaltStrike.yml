@@ -1,0 +1,14 @@
+title: Suspicious Process Access (Cobalt Strike)
+description: Sysmon Event ID 10 for Cobalt Strike detection.
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        EventID: 10
+        GrantedAccess: '0x1FFFFF'
+    condition: selection
+# --- Splunk SPL Query ---
+# index=windows sourcetype=XmlWinEventLog:Microsoft-Windows-Sysmon/Operational EventCode=10 GrantedAccess="0x1FFFFF"
+#
+# Yaddaşda (RAM) zərərli proses fəaliyyəti (Cobalt Strike ehtimalı).
