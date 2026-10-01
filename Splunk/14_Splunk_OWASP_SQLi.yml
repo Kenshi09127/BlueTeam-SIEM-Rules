@@ -1,0 +1,12 @@
+title: OWASP Top 10 - SQL Injection Attempt
+description: Detects SQLi payloads in web server logs.
+logsource:
+    category: webserver
+detection:
+    selection:
+        c_uri|contains: ['UNION SELECT', 'OR 1=1', '--']
+    condition: selection
+# --- Splunk SPL Query ---
+# index=web sourcetype=nginx:access uri_path="*UNION SELECT*" OR uri_path="*OR 1=1*"
+#
+# Veb-serverə SQL Injection (SQLi) hücumu cəhdi.
