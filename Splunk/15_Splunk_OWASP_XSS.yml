@@ -1,0 +1,12 @@
+title: OWASP Top 10 - Cross Site Scripting (XSS)
+description: Detects XSS payloads in web server logs.
+logsource:
+    category: webserver
+detection:
+    selection:
+        c_uri|contains: ['<script>', 'javascript:']
+    condition: selection
+# --- Splunk SPL Query ---
+# index=web sourcetype=nginx:access uri_path="*<script>*" OR uri_path="*javascript:*"
+#
+# Veb-serverə Cross-Site Scripting (XSS) hücumu cəhdi.
