@@ -1,5 +1,6 @@
 title: Lateral Movement from Honeypot to AD
 description: Traffic from Honeypot IP to Active Directory (Requirement 11).
+level: high
 logsource:
     category: firewall
 detection:
