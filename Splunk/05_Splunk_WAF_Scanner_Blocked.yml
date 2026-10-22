@@ -1,5 +1,6 @@
 title: WAF Blocked Vulnerability Scanner
 description: Detects sqlmap, nmap, nikto in User-Agent.
+level: medium
 logsource:
     category: waf
 detection:
