@@ -1,5 +1,6 @@
 title: CreateRemoteThread Detected (Cobalt Strike)
 description: Sysmon Event ID 8 detecting memory injection.
+level: critical
 logsource:
     product: windows
     service: sysmon
