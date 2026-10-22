@@ -1,12 +1,13 @@
 title: API DDoS Attack Detection
-description: Spike in API requests indicating a potential DDoS.
+description: Spike in API requests from a single source IP indicating a potential DDoS.
+level: high
 logsource:
     category: webserver
+    product: nginx
 detection:
     selection:
-        c_uri: '/api/*'
-    condition: selection | count() > 1000 | timeframe: 1m
+        c_uri|contains: '/api/'
+    timeframe: 1m
+    condition: selection | count() by src_ip > 1000
 # --- Splunk SPL Query ---
-# index=web sourcetype=nginx:access uri_path="/api/*" | stats count by src_ip | where count > 1000
-#
-# Eyni IP-dən API-yə qısa müddətdə çoxlu sayda sorğu gəlir (DDoS ehtimalı).
+# Eyni IP-dən API-yə 1 dəqiqə ərzində 1000-dən çox sorğu gəlir (DDoS ehtimalı).
