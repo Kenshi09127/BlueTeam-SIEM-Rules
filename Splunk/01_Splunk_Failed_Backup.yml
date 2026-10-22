@@ -1,14 +1,16 @@
 title: Detect Failed Domain Controller Backup
-description: Active Directory backup failure detection.
+description: Active Directory System State backup failure detection (Windows Server Backup).
+level: high
 logsource:
     product: windows
     service: application
 detection:
     selection:
-        EventID: [513, 12289, 8229]
-        SourceName: Microsoft-Windows-Backup
+        SourceName: 'Microsoft-Windows-Backup'
+        EventID: [517, 521]
     condition: selection
 # --- Splunk SPL Query ---
-# index=windows sourcetype=WinEventLog:Application (EventCode=513 OR EventCode=12289)
+# index=windows sourcetype=WinEventLog:Application source="Microsoft-Windows-Backup" (EventCode=517 OR EventCode=521)
 #
-# Active Directory ehtiyat nüsxəsinin (backup) yaradılması zamanı xəta baş verdi.
+# Active Directory ehtiyat nüsxəsinin (System State backup) alınması zamanı xəta baş verdi.
+# 517 - ümumi backup xətası, 521 - Volume Shadow Copy (VSS) xətası.
