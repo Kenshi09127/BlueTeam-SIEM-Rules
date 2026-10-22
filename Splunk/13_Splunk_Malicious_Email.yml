@@ -1,5 +1,6 @@
 title: Malicious Email Attachment Detected
 description: Email containing .exe or .vbs attachment.
+levelL: medium
 logsource:
     category: email
 detection:
