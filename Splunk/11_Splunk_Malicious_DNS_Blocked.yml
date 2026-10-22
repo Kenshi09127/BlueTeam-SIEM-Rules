@@ -1,5 +1,6 @@
 title: Malicious_DNS_Request_Blocked
 description: Request to C2 server blocked by DNS sinkhole.
+level: high
 logsource:
     category: dns
 detection:
