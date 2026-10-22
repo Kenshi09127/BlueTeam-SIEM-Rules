@@ -1,5 +1,6 @@
 title: Windows Defender Disabled
 description: Antivirus xidmətinin registry və ya komandalar vasitəsilə dayandırılması cəhdi.
+level: critical
 logsource:
     product: windows
     service: sysmon
