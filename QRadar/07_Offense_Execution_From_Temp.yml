@@ -1,5 +1,6 @@
 title: Execution from Temp Folder
 description: Executable faylın Temp qovluğundan işə salınması (Zərərli proqramların tez-tez etdiyi davranış).
+level: medium
 logsource:
     product: windows
     service: sysmon
