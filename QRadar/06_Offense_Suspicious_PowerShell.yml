@@ -1,5 +1,6 @@
 title: Suspicious PowerShell Execution (Encoded)
 description: Komandaları gizlətmək üçün -EncodedCommand arqumentindən istifadə (Base64).
+level: high
 logsource:
     product: windows
     service: sysmon
