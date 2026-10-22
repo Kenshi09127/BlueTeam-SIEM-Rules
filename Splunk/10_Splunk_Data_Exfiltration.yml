@@ -1,5 +1,6 @@
 title: Data_Exfiltration_Attempt
 description: Attempt to copy credit card data to USB.
+level: high
 logsource:
     category: dlp
 detection:
