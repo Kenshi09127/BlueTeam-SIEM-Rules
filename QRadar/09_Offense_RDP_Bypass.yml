@@ -1,5 +1,6 @@
 title: Direct RDP Logon Bypass (PAM Bypass)
 description: PAM serverinin IP ünvanından fərqli mənbədən successful remote giriş (Logon Type 10).
+level: high
 logsource:
     product: windows
     service: security
