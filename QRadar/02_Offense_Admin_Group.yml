@@ -1,5 +1,6 @@
 title: User Added to Local Administrators
 description: Administrators qrupuna əlavə edilməklə privilege escalation cəhdi.
+level: high
 logsource:
     product: windows
     service: security
