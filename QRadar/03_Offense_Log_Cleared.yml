@@ -1,5 +1,6 @@
 title: Security Log Cleared
 description: Windows security loglarının silinməsi. 
+level: high
 logsource:
     product: windows
     service: security
