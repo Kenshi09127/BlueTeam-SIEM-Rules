@@ -1,5 +1,6 @@
 title: Detect New User Creation
 description: Windows Server-də yeni userin yaranmasının aşkarlanması.
+level: medium
 logsource:
     product: windows
     service: security
