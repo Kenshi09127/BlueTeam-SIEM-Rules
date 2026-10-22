@@ -1,5 +1,6 @@
 title: Privileged_Access
 description: Unauthorized privileged access detected by PAM.
+level: high
 logsource:
     category: pam
 detection:
