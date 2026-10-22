@@ -1,5 +1,6 @@
 title: Suspicious Process Access (Cobalt Strike)
 description: Sysmon Event ID 10 for Cobalt Strike detection.
+level: critical
 logsource:
     product: windows
     service: sysmon
