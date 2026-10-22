@@ -1,5 +1,6 @@
 title: Web Server API 403 Forbidden
 description: Detects forbidden directory access attempts.
+level: low
 logsource:
     category: webserver
 detection:
