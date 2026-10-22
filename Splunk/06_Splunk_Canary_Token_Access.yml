@@ -1,5 +1,6 @@
 title: Honeypot Canary Token Accessed (CRITICAL)
 description: Access to fake sqladmin user or userpasswords.txt.
+level: critical
 logsource:
     category: honeypot
 detection:
