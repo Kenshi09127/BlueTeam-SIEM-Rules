@@ -1,5 +1,6 @@
 title: Web Server API 401 Unauthorized
 description: Detects unauthorized API access attempts.
+level: low
 logsource:
     category: webserver
 detection:
