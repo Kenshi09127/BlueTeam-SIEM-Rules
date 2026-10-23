@@ -14,3 +14,4 @@ tags:
 # QRadar Closure:
 # True-Positive: Compromise olunmuş user vasitəsilə privilege escalation.
 # False-Positive: Legit userin planlaşdırılmış şəkildə Administrators qrupuna əlavə edilməsi.
+#test
