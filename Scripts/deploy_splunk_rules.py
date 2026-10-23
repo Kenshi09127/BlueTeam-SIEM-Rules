@@ -1,10 +1,6 @@
-import requests, os, configparser, urllib3
+import requests, os, sys, yaml, urllib3
 urllib3.disable_warnings()
 
-# Креды берутся из окружения, не из кода:
-#   export SPLUNK_HOST=IP
-#   export SPLUNK_USER=USER
-#   export SPLUNK_PASS=PASS
 HOST = os.environ["SPLUNK_HOST"]
 PORT = os.environ.get("SPLUNK_PORT", "8089")
 USER = os.environ["SPLUNK_USER"]
@@ -12,61 +8,106 @@ PASS = os.environ["SPLUNK_PASS"]
 APP = os.environ.get("SPLUNK_APP", "search")
 AUTH = (USER, PASS)
 
-BASE = f"https://{HOST}:{PORT}/servicesNS/nobody/{APP}/saved/searches"
+BASE = "https://{}:{}/servicesNS/nobody/{}/saved/searches".format(HOST, PORT, APP)
+LEVEL_TO_SEVERITY = {"informational": "1", "low": "2", "medium": "3", "high": "4", "critical": "5"}
+MARKER = "splunk spl query"
+
+
+def extract_spl_from_comments(raw_text):
+    """Достаёт закомментированный SPL-блок вида:
+    # --- Splunk SPL Query ---
+    # index=web ...
+    # (uri_path=... )
+    #                       <- пустая строка-комментарий = конец блока
+    """
+    lines = raw_text.splitlines()
+    collecting = False
+    spl_lines = []
+    for line in lines:
+        stripped = line.strip()
+        if not collecting:
+            if stripped.startswith("#") and MARKER in stripped.lower():
+                collecting = True
+            continue
+        if not stripped.startswith("#"):
+            break
+        content = stripped.lstrip("#").strip()
+        if not content:
+            break
+        spl_lines.append(content)
+    return " ".join(spl_lines) if spl_lines else None
+
+
+def parens_balanced(spl):
+    return spl.count("(") == spl.count(")")
 
 
 def sync():
-    rules_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "splunk-rules")
-    conf_files = [f for f in os.listdir(rules_dir) if f.endswith(".conf")]
-    print(f"--- SOC Automation: найдено {len(conf_files)} правил ---")
+    rules_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "Splunk")
 
-    for fn in conf_files:
-        rule_name = fn.replace(".conf", "")
-        cfg = configparser.ConfigParser(interpolation=None)
-        cfg.read(os.path.join(rules_dir, fn))
+    if not os.path.isdir(rules_dir):
+        print("❌ Папка не найдена: {}".format(rules_dir))
+        print("Проверь, что скрипт лежит в Scripts/, а правила — в Splunk/ на уровень выше.")
+        sys.exit(1)
 
-        if rule_name not in cfg:
-            print(f"⚠️ {fn}: нет секции [{rule_name}] — пропускаю")
-            continue
+    yml_files = [f for f in os.listdir(rules_dir) if f.endswith((".yml", ".yaml"))]
+    print("--- Splunk Sync: найдено {} правил ---".format(len(yml_files)))
 
-        section = cfg[rule_name]
-        if "search" not in section:
-            print(f"⚠️ {fn}: нет ключа 'search' — пропускаю")
-            continue
-
-        payload = {
-            "search": section["search"],
-            "description": section.get("description", ""),
-            "is_visible": "true",
-            "disabled": "0",
-            "dispatch.earliest_time": section.get("earliest", "-24h"),
-            "dispatch.latest_time": section.get("latest", "now"),
-            # без этого блока правило ничего не алертит, просто лежит как поиск:
-            "is_scheduled": "1",
-            "cron_schedule": section.get("cron", "*/5 * * * *"),
-            "alert_type": "number of events",
-            "alert_comparator": "greater than",
-            "alert_threshold": section.get("threshold", "0"),
-            "alert.severity": section.get("severity", "3"),
-            "actions": section.get("actions", ""),
-            "action.webhook.param.url": section.get("webhook_url", ""),
-        }
-
+    for fn in yml_files:
+        path = os.path.join(rules_dir, fn)
         try:
-            # пробуем создать; если уже существует — обновляем
-            res = requests.post(BASE, data={**payload, "name": rule_name}, auth=AUTH, verify=False, timeout=15)
+            raw = open(path, encoding="utf-8").read()
+            rule = yaml.safe_load(raw)
+
+            if not rule or "title" not in rule:
+                print("⚠️ {}: нет 'title' — пропускаю".format(fn))
+                continue
+
+            spl = extract_spl_from_comments(raw)
+            if not spl:
+                print("⚠️ {}: не нашёл блок '--- Splunk SPL Query ---' — пропускаю".format(fn))
+                continue
+
+            if not parens_balanced(spl):
+                print("❌ {}: НЕ сбалансированы скобки ( {} vs ) {} — правило НЕ задеплоено".format(
+                    fn, spl.count("("), spl.count(")")))
+                continue
+
+            rule_name = rule["title"].strip().replace(" ", "_").replace("-", "_")
+
+            payload = {
+                "search": spl,
+                "description": rule.get("description", ""),
+                "is_visible": "true",
+                "disabled": "0",
+                "dispatch.earliest_time": "-24h",
+                "dispatch.latest_time": "now",
+                "is_scheduled": "1",
+                "cron_schedule": "*/5 * * * *",
+                "alert_type": "number of events",
+                "alert_comparator": "greater than",
+                "alert_threshold": "0",
+                "alert.severity": LEVEL_TO_SEVERITY.get(rule.get("level", "medium"), "3"),
+            }
+
+            data_create = dict(payload)
+            data_create["name"] = rule_name
+            res = requests.post(BASE, data=data_create, auth=AUTH, verify=False, timeout=15)
 
             if res.status_code in (200, 201):
-                print(f"✅ CREATED: {rule_name}")
+                print("✅ CREATED: {}".format(rule_name))
             elif res.status_code == 400 and "already exists" in res.text.lower():
-                res_up = requests.post(f"{BASE}/{rule_name}", data=payload, auth=AUTH, verify=False, timeout=15)
-                print(f"🔄 UPDATED: {rule_name}" if res_up.status_code == 200
-                      else f"❌ UPDATE FAILED: {rule_name} ({res_up.status_code}) {res_up.text[:150]}")
+                update_url = "{}/{}".format(BASE, rule_name)
+                res_up = requests.post(update_url, data=payload, auth=AUTH, verify=False, timeout=15)
+                if res_up.status_code == 200:
+                    print("🔄 UPDATED: {}".format(rule_name))
+                else:
+                    print("❌ UPDATE FAILED: {} ({}) {}".format(rule_name, res_up.status_code, res_up.text[:150]))
             else:
-                print(f"❌ FAILED: {rule_name} ({res.status_code}) {res.text[:150]}")
+                print("❌ FAILED: {} ({}) {}".format(rule_name, res.status_code, res.text[:150]))
 
-        except requests.RequestException as e:
-            print(f"⚠️ Ошибка сети для {rule_name}: {e}")
+        except Exception as e:
+            print("⚠️ Ошибка в {}: {}".format(fn, e))
 
 
 if __name__ == "__main__":
