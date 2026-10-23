@@ -4,12 +4,13 @@ level: high
 logsource:
     category: webserver
     product: nginx
+
 search: >
     index=web sourcetype=nginx:access
     (uri_path="*UNION SELECT*" OR uri_path="*union select*" OR uri_path="*UNION ALL SELECT*"
     OR uri_path="*OR 1=1*" OR uri_path="*OR '1'='1*" OR uri_path="*' OR 'a'='a*"
     OR uri_path="*--*" OR uri_path="*#*" OR uri_path="*/\**" OR uri_path="*';*"
-    OR uri_path="*SLEEP(*)*" OR uri_path="*WAITFOR DELAY*" OR uri_path="*BENCHMARK(*)*")
+    OR uri_path="*SLEEP*" OR uri_path="*WAITFOR DELAY*" OR uri_path="*BENCHMARK*")
 
 detection:
     selection_union:
@@ -25,16 +26,16 @@ detection:
             - "' OR 'a'='a"
     selection_blind:
         c_uri|contains:
-            - 'SLEEP('
-            - 'sleep('
+            - 'SLEEP'
+            - 'sleep'
             - 'WAITFOR DELAY'
-            - 'BENCHMARK('
+            - 'BENCHMARK'
     selection_error_based:
         c_uri|contains:
-            - 'CONVERT('
-            - 'CAST('
-            - 'extractvalue('
-            - 'updatexml('
+            - 'CONVERT'
+            - 'CAST'
+            - 'extractvalue'
+            - 'updatexml'
     condition: 1 of selection_*
 # --- Splunk SPL Query ---
 #
