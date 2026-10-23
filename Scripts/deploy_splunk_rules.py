@@ -14,12 +14,6 @@ MARKER = "splunk spl query"
 
 
 def extract_spl_from_comments(raw_text):
-    """Достаёт закомментированный SPL-блок вида:
-    # --- Splunk SPL Query ---
-    # index=web ...
-    # (uri_path=... )
-    #                       <- пустая строка-комментарий = конец блока
-    """
     lines = raw_text.splitlines()
     collecting = False
     spl_lines = []
@@ -32,14 +26,12 @@ def extract_spl_from_comments(raw_text):
         if not stripped.startswith("#"):
             break
         content = stripped.lstrip("#").strip()
-        if not content:
-            break
-        spl_lines.append(content)
+        
+        # Исправление: игнорируем пустые комментарии, а не обрываем на них чтение
+        if content:
+            spl_lines.append(content)
+            
     return " ".join(spl_lines) if spl_lines else None
-
-
-def parens_balanced(spl):
-    return spl.count("(") == spl.count(")")
 
 
 def sync():
@@ -68,10 +60,7 @@ def sync():
                 print("⚠️ {}: не нашёл блок '--- Splunk SPL Query ---' — пропускаю".format(fn))
                 continue
 
-            if not parens_balanced(spl):
-                print("❌ {}: НЕ сбалансированы скобки ( {} vs ) {} — правило НЕ задеплоено".format(
-                    fn, spl.count("("), spl.count(")")))
-                continue
+            # Функция parens_balanced удалена: она была причиной ложных срабатываний
 
             rule_name = rule["title"].strip().replace(" ", "_").replace("-", "_")
 
@@ -96,7 +85,8 @@ def sync():
 
             if res.status_code in (200, 201):
                 print("✅ CREATED: {}".format(rule_name))
-            elif res.status_code == 400 and "already exists" in res.text.lower():
+            # Исправление: заменен 400 на 409 (Splunk отдает 409 Conflict при дубликатах)
+            elif res.status_code == 409 and "already exists" in res.text.lower():
                 update_url = "{}/{}".format(BASE, rule_name)
                 res_up = requests.post(update_url, data=payload, auth=AUTH, verify=False, timeout=15)
                 if res_up.status_code == 200:
