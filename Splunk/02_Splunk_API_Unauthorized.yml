@@ -12,3 +12,4 @@ detection:
 # index=web sourcetype=nginx:access status=401 uri_path="/api/*"
 #
 # Veb-serverin API-yə icazəsiz (Unauthorized) giriş cəhdi.
+#test
