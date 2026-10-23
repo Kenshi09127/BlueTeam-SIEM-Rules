@@ -36,6 +36,6 @@ detection:
 # (uri_path="*UNION SELECT*" OR uri_path="*union select*" OR uri_path="*UNION ALL SELECT*"
 #  OR uri_path="*OR 1=1*" OR uri_path="*OR '1'='1*" OR uri_path="*' OR 'a'='a*"
 #  OR uri_path="*--*" OR uri_path="*#*" OR uri_path="*/\**" OR uri_path="*';*"
-#  OR uri_path="*SLEEP(*" OR uri_path="*WAITFOR DELAY*" OR uri_path="*BENCHMARK(*"
+#  OR uri_path="*SLEEP(*" OR uri_path="*WAITFOR DELAY*" OR uri_path="*BENCHMARK(*")
 #
 # Veb-serverə SQL Injection (SQLi) hücumu cəhdi — UNION-based, boolean-based, blind.
